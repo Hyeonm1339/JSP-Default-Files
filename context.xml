@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+   <Resource name = "jdbc/OracleDB"
+      auth = "Container"
+      type = "javax.sql.DataSource"
+      username = "scott"
+      password = "tiger"
+      driverClassName = "oracle.jdbc.driver.OracleDriver"
+      factory = "org.apache.tomcat.dbcp.dbcp2.BasicDataSourceFactory"
+      url = "jdbc:oracle:thin:@localhost:1521:orcl"
+      maxActive = "500"
+      maxIdle = "100"
+   />
+</Context>
+
+<!-- 1
+
+<%@ page import="java.sql.*"%>
+<%@ page import="javax.sql.*"%>
+<%@ page import="javax.naming.*"%>
+
+임폴트 선언부
+
+
+<%!Connection conn = null;
+	PreparedStatement pstmt = null;
+	String sql = "insert into product values(?,?,?,?,?,?)";%>
+	
+변수 초기화부분(인서트부분 값입력을 위한 선언부)
+	
+	<%!
+	Connection conn = null;
+	Statement stmt = null;
+	ResultSet rs = null;
+	
+	String sql = "select * from PRODUCT";
+%>
+
+변수초기화부분 (셀렉트문 조회 결과값 변수초기화)
+	
+	
+request.setCharacterEncoding("UTF-8");  인코딩을위한 선언부
+
+	try{
+		Context init = new InitialContext();
+		DataSource ds = (DataSource) init.lookup("java:comp/env/jdbc/OracleDB");
+		conn = ds.getConnection();
+		
+		pstmt = conn.prepareStatement(sql);
+		
+		pstmt.setString(index, key);  입력된값을 읽어들이기위한 함수
+		
+		pstmt.executeUpdate();
+	}catch(Exception e){
+		e.printStackTrace();
+	}finally{
+		try{
+			if(pstmt != null) pstmt.close();
+			if(conn != null) conn.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	} 넘어온 값을 찾아서 입력하기위한 트라이캐치문
+	
+	
+	try{
+		Context init = new InitialContext();
+		DataSource ds = (DataSource) init.lookup("java:comp/env/jdbc/OracleDB");
+		conn = ds.getConnection();
+		stmt = conn.createStatement();
+		rs = stmt.executeQuery(sql);
+		
+		while(rs.next()){
+			out.println("<tr>");
+			out.println("<td>" + rs.getString("p_id") + "</td>");
+			out.println("<td>" + rs.getString("p_name") + "</td>");
+			out.println("<td>" + rs.getInt("p_unitprice") + "</td>");
+			out.println("<td>" + rs.getString("p_description") + "</td>");
+			out.println("<td>" + rs.getString("p_category") + "</td>");
+			out.println("<td>" + rs.getString("p_manufacturer") + "</td>");
+			out.println("</tr>");
+		}				
+	}catch(Exception e){
+		e.printStackTrace();
+	}finally{
+		try{
+			if( rs != null) rs.close();
+			if( stmt != null) stmt.close();
+			if( conn != null) conn.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}		DB에있는 값을 조회하기위한 트라이캐치문 예제
+
+
+-->
