@@ -1,0 +1,23 @@
+자바 싱글톤 패턴클래스
+
+public class 클래스명 {
+	private 클래스명 () {
+		
+	}
+	
+	private static 클래스명 instance = new EmployeesDAO();
+	
+	public static 클래스명 getInstance() {
+		return instance;
+	}
+	
+	public Connection getConnection() throws Exception{
+		Connection conn = null;
+		Context init = new InitialContext();
+		DataSource ds = (DataSource) init.lookup("java:comp/env/jdbc/OracleDB");
+		conn = ds.getConnection();
+		
+		return conn;
+	}
+
+}
